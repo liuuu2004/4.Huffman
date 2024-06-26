@@ -11,6 +11,7 @@
 class HuffmanTree {
 public:
     std::shared_ptr<TreeNode> root_;
+    
     std::vector<char> to_byte_array(std::string &s);
     HuffmanTree(std::unordered_map<char, std::string> &mp);
     HuffmanTree(std::unordered_map<char, int> &mp);

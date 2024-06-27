@@ -19,7 +19,7 @@ public:
     std::unordered_map<char, std::string> to_huffman_code();
 
 private:
-    void dfs(std::unordered_map<char, std::string> &mp, std::shared_ptr<TreeNode> node, std::string s);
+    void dfs(std::unordered_map<char, std::string> &code, std::shared_ptr<TreeNode> node, std::string s);
     std::shared_ptr<TreeNode> join(std::shared_ptr<TreeNode> node1, std::shared_ptr<TreeNode> node2);
 };
 

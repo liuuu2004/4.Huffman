@@ -2,6 +2,8 @@
 #include "min_heap.h"
 #include "tree_node.h"
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 std::vector<char> HuffmanTree::to_byte_array(std::string &s) {
@@ -51,4 +53,34 @@ HuffmanTree::HuffmanTree(std::unordered_map<char, int> &byte_cnt) {
         pq->push(new_node);
     }
     root_ = pq->pop();
+}
+
+std::unordered_map<char, std::string> HuffmanTree::to_huffman_code() {
+    std::unordered_map<char, std::string> res;
+    dfs(res, root_, "");
+    return res;
+}
+
+void HuffmanTree::dfs(std::unordered_map<char, std::string> &code, std::shared_ptr<TreeNode> node, std::string s) {
+    if (node->left_ == nullptr && node->right_ == nullptr) {
+        if (node == root_) {
+            code[node->data_] = "0";
+        } else {
+            code[node->data_] = s;
+        }
+        return;
+    }
+    if (node->left_ != nullptr) {
+        dfs(code, node->left_, s + "0");
+    }
+    if (node->right_ != nullptr) {
+        dfs(code, node->right_, s + "1");
+    }
+}
+
+std::shared_ptr<TreeNode> HuffmanTree::join(std::shared_ptr<TreeNode> node1, std::shared_ptr<TreeNode> node2) {
+    auto res = std::make_shared<TreeNode>(0, node1->frequency_ + node2->frequency_);
+    res->left_ = node1;
+    res->right_ = node2;
+    return res;
 }

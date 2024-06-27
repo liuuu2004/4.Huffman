@@ -3,8 +3,6 @@
 
 #include "huffman_tree.h"
 
-class HuffmanData {
-    
-};
+
 
 #endif

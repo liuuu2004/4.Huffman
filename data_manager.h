@@ -7,7 +7,10 @@
 #define DATA_MANAGER_H_
 
 #include "file_manager.h"
+#include "huffman_tree.h"
+
 #include <string>
+#include <unordered_map>
 
 class DataManager {
 public:
@@ -59,6 +62,8 @@ public:
     */
     void performance(const std::string &file_before, const std::string &file_after);
 
+private:
+    int encode()
 };
 
 #endif

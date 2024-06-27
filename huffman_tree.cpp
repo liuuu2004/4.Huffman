@@ -1,4 +1,5 @@
 #include "huffman_tree.h"
+#include "min_heap.h"
 #include "tree_node.h"
 #include <memory>
 #include <vector>
@@ -34,4 +35,20 @@ HuffmanTree::HuffmanTree(std::unordered_map<char, std::string> &code) {
             }
         }
     }
+}
+
+HuffmanTree::HuffmanTree(std::unordered_map<char, int> &byte_cnt) {
+    auto pq = std::make_shared<MinHeap>();
+
+    for (auto i : byte_cnt) {
+        auto new_node = std::make_shared<TreeNode>(i.first, i.second);
+        pq->push(new_node);
+    }
+    while (pq->size() > 1) {
+        auto first = pq->pop();
+        auto second = pq->pop();
+        auto new_node = join(first, second);
+        pq->push(new_node);
+    }
+    root_ = pq->pop();
 }

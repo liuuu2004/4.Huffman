@@ -7,6 +7,7 @@
 
 class MinHeap {
 public:
+    MinHeap() = default;
     void push(std::shared_ptr<TreeNode> node);
     std::shared_ptr<TreeNode> pop();
     const int size() const ;

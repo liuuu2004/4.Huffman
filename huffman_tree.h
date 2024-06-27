@@ -13,8 +13,8 @@ public:
     std::shared_ptr<TreeNode> root_;
     
     std::vector<char> to_byte_array(std::string &s);
-    HuffmanTree(std::unordered_map<char, std::string> &mp);
-    HuffmanTree(std::unordered_map<char, int> &mp);
+    HuffmanTree(std::unordered_map<char, std::string> &code);
+    HuffmanTree(std::unordered_map<char, int> &byte_cnt);
     ~HuffmanTree();
     std::unordered_map<char, std::string> to_huffman_code();
 

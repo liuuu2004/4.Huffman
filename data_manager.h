@@ -40,9 +40,11 @@ public:
 
     /**
      * @brief command: -ra  analyze information before and after compression in increase order
-     *      original characters, 0x-original characters, compressed characters, frequencies, percentage
-     *      i.e.
-     *      a  0x81  0010  2166  5.2676%
+     *
+     *   original characters, 0x-original characters, compressed characters, frequencies, percentage
+     *   i.e.
+     *   a  0x81  0010  2166  5.2676%
+     *
      * @param file_before :original file
      * @param file_after :file after compression
     */
@@ -63,7 +65,15 @@ public:
     void performance(const std::string &file_before, const std::string &file_after);
 
 private:
-    int encode()
+    /**
+     * @brief encode the given Huffman tree to binary code
+     * @param huffman_map :coded huffman map from char to str
+     * @param res :store the coded data
+     * @param buffer :buffer to store characters to be encoded
+     * @return length of the coded data
+    */
+    int encode(std::unordered_map<char, std::string> &huffman_map, std::vector<char> &res,
+               std::vector<char> &buffer);
 };
 
 #endif

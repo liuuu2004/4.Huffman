@@ -1,3 +1,7 @@
+/**
+ * Define a Huffman Tree
+*/
+
 #ifndef HUFFMAN_TREE_H_
 #define HUFFMAN_TREE_H_
 
@@ -10,9 +14,19 @@
 
 class HuffmanTree {
 public:
+    // root node of the Huffman tree
     std::shared_ptr<TreeNode> root_;
     
+    /**
+     * @brief convert a Huffman-encoded string to its original sequence
+     * @param s :Huffman-encoded string tobe converted
+    */
     std::vector<char> to_byte_array(std::string &s);
+
+    /**
+     * @brief Huffman Tree Constructor
+     * @param code :
+    */
     HuffmanTree(std::unordered_map<char, std::string> &code);
     HuffmanTree(std::unordered_map<char, int> &byte_cnt);
     ~HuffmanTree();

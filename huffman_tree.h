@@ -3,7 +3,7 @@
  *
  * Functions:
  * 1. if you pass a map<character, frequency> to its constructor, it can encode it to a map<character, string>
- *    
+ * 2. if you pass a map<character, string> to its constructor, it can decode it to a byte array
 */
 
 #ifndef HUFFMAN_TREE_H_

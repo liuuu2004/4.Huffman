@@ -1,27 +1,30 @@
 #include "data_manager.h"
 #include "huffman_tree.h"
+#include <unordered_map>
+#include <vector>
 
-void DataManager::compress(const std::string &file_before, const std::string &file_after) {
-    FileManager fm;
-    auto ori_content = fm.read_file(file_before);
+std::unordered_map<char, int> count_each_byte(const std::vector<char> &buffer) {
     std::unordered_map<char, int> res;
-    for (auto c : ori_content) {
+    for (auto c : buffer) {
         res[c]++;
     }
-    HuffmanTree ht(res);
-    auto coded_map = ht.to_huffman_code();
-    
+    return res;
 }
 
-int DataManager::encode(std::unordered_map<char, std::string> &huffman_map, std::vector<char> &res,
-                        std::vector<char> &buffer) {
+std::unordered_map<char, std::string> get_huff_code(std::unordered_map<char, int> &byte_cnt) {
+    HuffmanTree ht(byte_cnt);
+    auto res = ht.to_huffman_code();
+    return res;
+}
+
+int encode(std::vector<char> &res, std::unordered_map<char, std::string> &encoded, std::vector<char> &buffer) {
     res.clear();
     int total_bit_cnt = 0;
     char byte = 0;
     int bit_cnt = 0;
     for (auto c : buffer) {
-        for (unsigned i = 0; i < huffman_map[c].length(); i++) {
-            char bit = huffman_map[c][i] == '0' ? 0 : 1;
+        for (auto bit_char : encoded[c]) {
+            char bit = bit_char == '0' ? 0 : 1;
             byte <<= 1;
             byte |= bit;
             ++bit_cnt;
@@ -34,11 +37,34 @@ int DataManager::encode(std::unordered_map<char, std::string> &huffman_map, std:
         }
     }
     if (bit_cnt) {
-        while (bit_cnt < 8) {
+        while (bit_cnt < 0) {
             byte <<= 1;
             ++bit_cnt;
         }
         res.emplace_back(byte);
     }
     return total_bit_cnt;
+}
+
+std::string decode(const std::vector<char> &buffer, int bit_cnt) {
+    std::string res;
+    for (auto c : buffer) {
+        for (int j = 7; j >= 0; --j) {
+            if (c >> j & 1) {
+                res += "1";
+            } else {
+                res += "0";
+            }
+            if (res.length() == bit_cnt) {
+                break;
+            }
+        }
+    }
+    return res;
+}
+
+std::vector<char> decompress(std::string &huffman_str, std::unordered_map<char, std::string> encoded) {
+    HuffmanTree ht(encoded);
+    auto res = ht.to_byte_array(huffman_str);
+    return res;
 }

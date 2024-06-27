@@ -1,6 +1,8 @@
-#include "huffman_tree.h"
+#include "cmd_helper.h"
 
 int main() {
-    run();
+    CMDHelper helper;
+    helper.run();
+    
     return 0;
 }

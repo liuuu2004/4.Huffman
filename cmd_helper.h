@@ -16,6 +16,7 @@
 class CMDHelper {
 public:
     void run();
+
 private:
     /**
      * @brief show helper
@@ -75,6 +76,10 @@ private:
      * @param file_after :file after compression
     */
     void performance(const std::string &file_before, const std::string &file_after);
+
+    int total_bit_cnt;
+
+    std::unordered_map<char, std::string> encoded_map;
 };
 
 #endif

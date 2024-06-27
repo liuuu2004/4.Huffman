@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 
-std::unordered_map<char, int> count_each_byte(const std::vector<char> &buffer) {
+std::unordered_map<char, int> count_each_byte(const std::string &buffer) {
     std::unordered_map<char, int> res;
     for (auto c : buffer) {
         res[c]++;
@@ -17,7 +17,7 @@ std::unordered_map<char, std::string> get_huff_code(std::unordered_map<char, int
     return res;
 }
 
-int encode(std::vector<char> &res, std::unordered_map<char, std::string> &encoded, std::vector<char> &buffer) {
+int encode(std::vector<char> &res, std::unordered_map<char, std::string> &encoded, std::string &buffer) {
     res.clear();
     int total_bit_cnt = 0;
     char byte = 0;
@@ -46,7 +46,7 @@ int encode(std::vector<char> &res, std::unordered_map<char, std::string> &encode
     return total_bit_cnt;
 }
 
-std::string decode(const std::vector<char> &buffer, int bit_cnt) {
+std::string decode(const std::string &buffer, int bit_cnt) {
     std::string res;
     for (auto c : buffer) {
         for (int j = 7; j >= 0; --j) {
@@ -63,7 +63,7 @@ std::string decode(const std::vector<char> &buffer, int bit_cnt) {
     return res;
 }
 
-std::vector<char> decompress(std::string &huffman_str, std::unordered_map<char, std::string> encoded) {
+std::vector<char> decompress_manager(std::string &huffman_str, std::unordered_map<char, std::string> encoded) {
     HuffmanTree ht(encoded);
     auto res = ht.to_byte_array(huffman_str);
     return res;

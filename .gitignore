@@ -1,11 +1,56 @@
-# C++ objects and libs
-*.slo
-*.lo
+# Ignore build directories
+/build/
+/build-*/
+
+# Ignore cmake build files
+CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+/install_manifest.txt
+_compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# Ignore executables and libraries
+*.out
 *.o
 *.a
-*.la
-*.lai
 *.so
-*.so.*
-*.dll
 *.dylib
+*.exe
+*.dll
+*.lib
+*.pdb
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.sublime-workspace
+*.sublime-project
+
+# Ignore other generated files
+*.log
+*.obj
+*.mod
+*.tmp
+*.d
+*.depend
+*.tds
+*.idb
+*.ilk
+*.map
+*.pch
+*.pdb
+*.pgd
+*.pgm
+*.rsp
+*.sbr
+*.tlog
+
+# Ignore CTest specific files
+Testing/
+*.test

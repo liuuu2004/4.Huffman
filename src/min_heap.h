@@ -30,7 +30,7 @@ public:
      * @brief get the size of the min heap
      * @return size of the min heap
     */
-    const int size() const ;
+    int size();
 
 private:
     // size of the min heap

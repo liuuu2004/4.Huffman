@@ -1,12 +1,13 @@
 #include "cmd_helper.h"
 #include "file_manager.h"
 #include <cstdio>
+#include <fstream>
 
 
 void CMDHelper::run() {
     std::string command;
     while (true) {
-        std::cout << "HuffmanCompressor > ";
+        std::cout << "HuffmanCompressor> ";
         std::cin >> command;
         if (command == "-h") {
             // -helper
@@ -44,13 +45,13 @@ void CMDHelper::run() {
             break;
         } else {
             // exception
-            printf("\nInlegal command, please try again or type -h to seek for help;");
+            printf("Inlegal command, please try again or type -h to seek for help;\n");
         }
     }
 }
 
 void CMDHelper::show_helper() {
-    std::cout << "\n\tyou can press:\n";
+    std::cout << "\tyou can press:\n";
     std::cout << "\t  -ec to encode a file;\n";
     std::cout << "\t  -dc to decode a file;\n";
     std::cout << "\t  -a to analyze files;\n";
@@ -62,6 +63,25 @@ void CMDHelper::show_helper() {
 
 void CMDHelper::compress(const std::string &file_before, const std::string &file_after) {
     FileManager fm;
+
+    std::ifstream check_file_before(file_before);
+    if (!check_file_before.good()) {
+        std::ofstream create_file_before(file_before);
+        create_file_before << "Sample text input if file does not exist.";
+        create_file_before.close();
+    }
+    check_file_before.close();
+
+    std::ifstream check_file_after(file_before);
+    if (!check_file_after.good()) {
+        std::ofstream create_file_after(file_before);
+        create_file_after.close();
+    }
+    check_file_after.close();
+
+    std::ofstream clear_file_after(file_after, std::ofstream::out | std::ofstream::trunc);
+    clear_file_after.close();
+
     std::string tobe_encoded = fm.read_file(file_before);
     cnt_map = count_each_byte(tobe_encoded);
     encoded_map = get_huff_code(cnt_map);
@@ -73,6 +93,18 @@ void CMDHelper::compress(const std::string &file_before, const std::string &file
 
 void CMDHelper::decompress(const std::string &file_after, const std::string &file_output) {
     FileManager fm;
+
+    std::ifstream check_file_after(file_after);
+    if (!check_file_after.good()) {
+        printf("error: file %s does not exist.\n", file_after.c_str());
+        check_file_after.close();
+        return;
+    }
+    check_file_after.close();
+
+    std::ofstream clear_file_output(file_output, std::ofstream::out | std::ofstream::trunc);
+    clear_file_output.close();
+
     std::string tobe_decoded = fm.read_file(file_after);
     std::string encoded_str = decode(tobe_decoded, total_bit_cnt);
     auto original_data = decompress_manager(encoded_str, encoded_map);
@@ -136,12 +168,12 @@ void CMDHelper::show_both(const std::string &file_before, const std::string &fil
                           const std::string &file_final) {
     FileManager fm;
     auto s1 = fm.read_file(file_before);
-    printf("\n%s:\n%s\n", file_before.c_str(), s1.c_str());
+    printf("\n%s:\n%s\n\n", file_before.c_str(), s1.c_str());
     
     auto s2 = fm.read_file(file_after);
-    printf("%s:\n%s\n", file_after.c_str(), s2.c_str());
+    printf("%s:\n%s\n\n", file_after.c_str(), s2.c_str());
 
     auto s3 = fm.read_file(file_final);
-    printf("%s:\n%s\n", file_final.c_str(), s3.c_str());
+    printf("%s:\n%s\n\n", file_final.c_str(), s3.c_str());
 }
 

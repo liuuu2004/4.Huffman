@@ -9,6 +9,9 @@
 #include "data_manager.h"
 #include "file_manager.h"
 
+#include <algorithm>
+#include <iostream>
+#include <vector>
 #include <string>
 #include <unordered_map>
 #include <iostream>
@@ -46,10 +49,8 @@ private:
      *      original characters, 0x-original characters, compressed characters, frequencies, percentage
      *      i.e.
      *      a  0x81  0010  2166  5.2676%
-     * @param file_before :original file
-     * @param file_after :file after compression
     */
-    void analyze_dec(const std::string &file_before, const std::string &file_after);
+    void analyze_dec();
 
     /**
      * @brief command: -ra  analyze information before and after compression in increase order
@@ -58,17 +59,15 @@ private:
      *   i.e.
      *   a  0x81  0010  2166  5.2676%
      *
-     * @param file_before :original file
-     * @param file_after :file after compression
     */
-    void analyze_inc(const std::string &file_before, const std::string &file_after);
+    void analyze_inc();
 
     /**
      * @brief command: -ls  print file contents to the cmd
      * @param file_before :original file
      * @param file_after :file after compression
     */
-    void show_both(const std::string &file_before, const std::string &file_after);
+    void show_both(const std::string &file_before, const std::string &file_after, const std::string &file_final);
 
     /**
      * @brief command: -pf  show performance
@@ -77,9 +76,13 @@ private:
     */
     void performance(const std::string &file_before, const std::string &file_after);
 
+    // DATA
+
     int total_bit_cnt;
 
     std::unordered_map<char, std::string> encoded_map;
+
+    std::unordered_map<char, int> cnt_map;
 };
 
 #endif

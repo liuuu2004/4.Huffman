@@ -8,7 +8,7 @@
 #include <vector>
 
 std::vector<char> HuffmanTree::to_byte_array(std::string &s) {
-    printf("\n%s\n", s.c_str());
+    // printf("\n%s\n", s.c_str());
     std::vector<char> res;
     auto now_node = root_;
     for (int i = 0; i < s.length(); ++i) {
@@ -54,70 +54,61 @@ HuffmanTree::HuffmanTree(std::unordered_map<char, int> &byte_cnt) {
         std::shared_ptr<TreeNode> new_node = std::make_shared<TreeNode>(i.first, i.second);
         pq->push(new_node);
     }
-    printf("\nPQSIZE:  %d\n", pq->size());
-    if (pq->size() == 1) {
-        root_ = pq->pop();
-    } else {
-        // auto first = pq->pop();
-        // auto second = pq->pop();
-        // auto new_node = std::make_shared<TreeNode>(0, first->frequency_ + second->frequency_);
-        // new_node->left_ = first;
-        // new_node->right_ = second;
-        // pq->push(new_node);
-        // root_ = pq->pop();
-        // pq->push(root_);
 
-        while (pq->size() > 1) {
-            printf("\nPQSIZE:  %d\n", pq->size());
+    // printf("\nInitial PQ Size: %d\n", pq->size());
 
-            auto first = pq->pop();
-            auto second = pq->pop();
-            
-            std::shared_ptr<TreeNode> new_node = std::make_shared<TreeNode>(0, first->frequency_ + second->frequency_);
-            new_node->left_ = first;
-            new_node->right_ = second;
-            pq->push(new_node);
-            // root_ = pq->pop();
-            // pq->push(root_);
-        }
-        root_ = pq->pop();
+    while (pq->size() > 1) {
+        auto first = pq->pop();
+        auto second = pq->pop();
+
+        // printf("\nPopped nodes: %c(%d), %c(%d)\n", first->data_, first->frequency_, second->data_, second->frequency_);
+
+        std::shared_ptr<TreeNode> new_node = std::make_shared<TreeNode>('$', first->frequency_ + second->frequency_);
+        new_node->left_ = first;
+        new_node->right_ = second;
+
+        // printf("\nCreated new node %c with frequency: %d\n", new_node->data_, new_node->frequency_);
+
+        pq->push(new_node);
     }
-    if (root_->left_ == nullptr && root_->right_ == nullptr) {
-        printf("\nLRNULL\n");
-    }
+    root_ = pq->pop();
+
+    // if (root_->left_ == nullptr && root_->right_ == nullptr) {
+    //     printf("\nLRNULL\n");
+    // }
 }
 
 std::unordered_map<char, std::string> HuffmanTree::to_huffman_code() {
     std::unordered_map<char, std::string> res;
     dfs(res, root_, "");
     
-    printf("\nFINISH HUFFMAN CODE\n");
+    // printf("\nFINISH HUFFMAN CODE\n");
 
     return res;
 }
 
 void HuffmanTree::dfs(std::unordered_map<char, std::string> &code, std::shared_ptr<TreeNode> &node, std::string s) {
-    printf("\nDFS\n");
+    // printf("\nDFS\n");
 
     if (node->left_ == nullptr && node->right_ == nullptr) {
-        printf("\nALLEMPTY\n");
+        // printf("\nALLEMPTY\n");
 
         if (node == root_) {
-            printf("\nISROOT\n");
-            printf("%d\n", node->data_);
+            // printf("\nISROOT\n");
+            // printf("%d\n", node->data_);
             code[node->data_] = "0";
-            printf("\nDONE\n");
+            // printf("\nDONE\n");
         } else {
             code[node->data_] = s;
         }
         return;
     }
     if (node->left_ != nullptr) {
-        printf("\nTOLEFT\n");
+        // printf("\nTOLEFT\n");
         dfs(code, node->left_, s + "0");
     }
     if (node->right_ != nullptr) {
-        printf("\nTORIGHT\n");
+        // printf("\nTORIGHT\n");
         dfs(code, node->right_, s + "1");
     }
 }

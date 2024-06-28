@@ -33,9 +33,6 @@ public:
     int size();
 
 private:
-    // size of the min heap
-    int size_ = 0;
-
     // vector to store the data of the min heap
     std::vector<std::shared_ptr<TreeNode>> heap_;
 

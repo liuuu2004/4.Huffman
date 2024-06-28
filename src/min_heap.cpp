@@ -6,7 +6,7 @@
 #include <utility>
 
 int MinHeap::size() {
-    return size_;
+    return heap_.size();
 }
 
 void MinHeap::minimize_heap(int i) {
@@ -14,10 +14,10 @@ void MinHeap::minimize_heap(int i) {
     int right = (i << 1) + 2;
     int smallest = i;
 
-    if (left < size_ && heap_[left]->frequency_ < heap_[smallest]->frequency_) {
+    if (left < heap_.size() && heap_[left]->frequency_ < heap_[smallest]->frequency_) {
         smallest = left;
     }
-    if (right < size_ && heap_[right]->frequency_ < heap_[smallest]->frequency_) {
+    if (right < heap_.size() && heap_[right]->frequency_ < heap_[smallest]->frequency_) {
         smallest = right;
     }
     if (smallest != i) {
@@ -39,16 +39,16 @@ void MinHeap::maintain_heap(int i) {
 
 void MinHeap::push(std::shared_ptr<TreeNode> node) {
     heap_.emplace_back(node);
-    ++size_;
-    maintain_heap(size_ - 1);
+    maintain_heap(heap_.size() - 1);
 }
 
 std::shared_ptr<TreeNode> MinHeap::pop() {
-    if (size_ == 0) {
+    if (heap_.size() == 0) {
         throw std::out_of_range("empty heap");
     }
     auto res = heap_[0];
-    heap_[0] = heap_[--size_];
+    heap_[0] = heap_.back();
+    heap_.pop_back();
     minimize_heap(0);
     return res;
 }

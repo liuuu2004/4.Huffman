@@ -9,7 +9,7 @@ TEST(HuffmanTreeTest, ToByteArrayTest) {
     std::unordered_map<char, int> byte_cnt = {{'a', 5}, {'b', 9}, {'c', 12}, {'d', 13}, {'e', 16}, {'f', 45}};
     HuffmanTree ht(byte_cnt);
 
-    printf("\nTEST\n");
+    // printf("\nTEST\n");
 
     std::unordered_map<char, std::string> huffman_code = ht.to_huffman_code();
     std::string encoded_string;
@@ -17,11 +17,11 @@ TEST(HuffmanTreeTest, ToByteArrayTest) {
         encoded_string += code;
     }
 
-    printf("\nTEST\n");
+    // printf("\nTEST\n");
 
     std::vector<char> decoded_string = ht.to_byte_array(encoded_string);
 
-    printf("\nTEST\n");
+    // printf("\nTEST\n");
 
     std::string decoded_result(decoded_string.begin(), decoded_string.end());
 

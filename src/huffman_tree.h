@@ -10,7 +10,7 @@
 #define HUFFMAN_TREE_H_
 
 #include "min_heap.h"
-#include "tree_node.h"
+
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -52,14 +52,14 @@ private:
      * @param node :Huffman tree node used to build a map
      * @param s :string to store the Huffman code of a char
     */
-    void dfs(std::unordered_map<char, std::string> &code, std::shared_ptr<TreeNode> node, std::string s);
+    void dfs(std::unordered_map<char, std::string> &code, std::shared_ptr<TreeNode> &node, std::string s);
 
     /**
      * @brief ENCODE :merge two nodes and let the merged node be their parent
      * @param node1 :node to be merged
      * @param node2 :node to be merged
     */
-    std::shared_ptr<TreeNode> join(std::shared_ptr<TreeNode> node1, std::shared_ptr<TreeNode> node2);
+    void join(std::shared_ptr<TreeNode> &root, std::shared_ptr<TreeNode> &node1, std::shared_ptr<TreeNode> &node2);
 };
 
 #endif

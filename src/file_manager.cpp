@@ -15,3 +15,13 @@ void FileManager::write_file(const std::string &file_path, const std::string &s)
     file << s;
     file.close();
 }
+
+bool FileManager::file_exist(const std::string &file_name) {
+    std::ifstream check_file(file_name);
+    if (!check_file.good()) {
+        check_file.close();
+        return false;
+    }
+    check_file.close();
+    return true;
+}

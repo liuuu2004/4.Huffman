@@ -2,6 +2,8 @@
 #include "file_manager.h"
 #include <cstdio>
 #include <fstream>
+#include <ios>
+#include <iostream>
 
 
 void CMDHelper::run() {
@@ -39,7 +41,17 @@ void CMDHelper::run() {
             show_both(input_file, output_file, final_file);
         } else if (command == "-pf") {
             // -performance
-
+            std::string before_compression, after_compression;
+            before_compression = "before_compression.txt";
+            after_compression = "after_compression.txt";
+            performance(before_compression, after_compression);
+        } else if (command == "-c") {
+            // -clear
+            std::string input_file, output_file, final_file;
+            input_file = "before_compression.txt";
+            output_file = "after_compression.txt";
+            final_file = "after_decompression.txt";
+            clear_file(input_file, output_file, final_file);
         } else if (command == "-q") {
             // -quit
             break;
@@ -58,26 +70,23 @@ void CMDHelper::show_helper() {
     std::cout << "\t  -ra to analyze files and print in reverse order;\n";
     std::cout << "\t  -ls to list files;\n";
     std::cout << "\t  -pf to show performance;\n";
+    std::cout << "\t  -c to clear all files;\n";
     std::cout << "\t  -q to quit;\n";
 }
 
 void CMDHelper::compress(const std::string &file_before, const std::string &file_after) {
     FileManager fm;
 
-    std::ifstream check_file_before(file_before);
-    if (!check_file_before.good()) {
+    if (!fm.file_exist(file_before)) {
         std::ofstream create_file_before(file_before);
-        create_file_before << "Sample text input if file does not exist.";
+        create_file_before << "sample text input if file does not exist";
         create_file_before.close();
     }
-    check_file_before.close();
 
-    std::ifstream check_file_after(file_before);
-    if (!check_file_after.good()) {
-        std::ofstream create_file_after(file_before);
+    if (!fm.file_exist(file_after)) {
+        std::ofstream create_file_after(file_after);
         create_file_after.close();
     }
-    check_file_after.close();
 
     std::ofstream clear_file_after(file_after, std::ofstream::out | std::ofstream::trunc);
     clear_file_after.close();
@@ -94,13 +103,10 @@ void CMDHelper::compress(const std::string &file_before, const std::string &file
 void CMDHelper::decompress(const std::string &file_after, const std::string &file_output) {
     FileManager fm;
 
-    std::ifstream check_file_after(file_after);
-    if (!check_file_after.good()) {
+    if (!fm.file_exist(file_after)) {
         printf("error: file %s does not exist.\n", file_after.c_str());
-        check_file_after.close();
         return;
     }
-    check_file_after.close();
 
     std::ofstream clear_file_output(file_output, std::ofstream::out | std::ofstream::trunc);
     clear_file_output.close();
@@ -121,20 +127,25 @@ void CMDHelper::analyze_dec() {
         double percentage;
     };
     std::vector<Data> res;
+
+    int total_char_cnt = 0;
+    for (auto &c : cnt_map) {
+        total_char_cnt += c.second;
+    }
+
     for (auto c : cnt_map) {
         Data data;
         data.ch = c.first;
         data.binary = encoded_map.at(c.first);
         data.frequency = c.second;
-        data.percentage = total_bit_cnt / (double)c.second / 8.0;
+        data.percentage = (static_cast<double>(c.second) / total_char_cnt) * 100.0;
 
         res.emplace_back(data);
     }
     std::sort(res.begin(), res.end(), [](Data a, Data b) {
         return a.frequency > b.frequency; });
-    printf("\n");
     for (auto d : res) {
-        printf("\t%c %x %6s %4d %.5lf\n", d.ch, d.ch, d.binary.c_str(), d.frequency, d.percentage);
+        printf("\t%c   %x  %6s %4d   %2.5lf%%\n", d.ch, d.ch, d.binary.c_str(), d.frequency, d.percentage);
     }
 }
 
@@ -147,20 +158,25 @@ void CMDHelper::analyze_inc() {
         double percentage;
     };
     std::vector<Data> res;
+
+    int total_char_cnt = 0;
+    for (auto &c : cnt_map) {
+        total_char_cnt += c.second;
+    }
+
     for (auto c : cnt_map) {
         Data data;
         data.ch = c.first;
         data.binary = encoded_map.at(c.first);
         data.frequency = c.second;
-        data.percentage = total_bit_cnt / (double)c.second / 8.0;
+        data.percentage = (static_cast<double>(c.second) / total_char_cnt) * 100.0;
 
         res.emplace_back(data);
     }
     std::sort(res.begin(), res.end(), [](Data a, Data b) {
         return a.frequency < b.frequency; });
-    printf("\n");
     for (auto d : res) {
-        printf("\t%c %x %6s %4d %.5lf\n", d.ch, d.ch, d.binary.c_str(), d.frequency, d.percentage);
+        printf("\t%c   %x  %6s %4d   %2.5lf%%\n", d.ch, d.ch, d.binary.c_str(), d.frequency, d.percentage);
     }
 }
 
@@ -177,3 +193,43 @@ void CMDHelper::show_both(const std::string &file_before, const std::string &fil
     printf("%s:\n%s\n\n", file_final.c_str(), s3.c_str());
 }
 
+void CMDHelper::clear_file(const std::string &file_before, const std::string &file_after,
+                           const std::string &file_final) {
+    FileManager fm;
+
+    if (fm.file_exist(file_before)) {
+        remove(file_before.c_str());
+        printf("file: %s deleted\n", file_before.c_str());
+    }
+
+    if (fm.file_exist(file_after)) {
+        remove(file_after.c_str());
+        printf("file: %s deleted\n", file_after.c_str());
+    }
+
+    if (fm.file_exist(file_final)) {
+        remove(file_final.c_str());
+        printf("file: %s deleted\n", file_final.c_str());
+    }
+}
+
+void CMDHelper::performance(const std::string &file_before, const std::string &file_after) {
+    FileManager fm;
+
+    if (!fm.file_exist(file_before) || !fm.file_exist(file_after)) {
+        std::cerr << "Error: file not exsist\n";
+        return;
+    }
+    std::ifstream file_before_stream(file_before, std::ifstream::ate | std::ifstream::binary);
+    std::streamsize file_before_size = file_before_stream.tellg();
+    file_before_stream.close();
+
+    std::ifstream file_after_stream(file_after, std::ifstream::ate | std::ifstream::binary);
+    std::streamsize file_after_size = file_after_stream.tellg();
+    file_after_stream.close();
+
+    double p = (file_after_size * 100.0) / file_before_size;
+    std::cout << "size of " << file_before << ": " << file_before_size << " bytes\n";
+    std::cout << "size of " << file_after << ": " << file_after_size << " bytes\n";
+    std::cout << "size of " << file_after << " is " << p << "% of the size of " << file_before << std::endl;
+}

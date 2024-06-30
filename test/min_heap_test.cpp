@@ -11,7 +11,6 @@
 TEST(MinHeapTest, PushPopTest) {
     auto heap = std::make_shared<MinHeap>();
 
-    // 创建一些 TreeNode 对象
     auto node1 = std::make_shared<TreeNode>(1, 5);
     auto node2 = std::make_shared<TreeNode>(2, 3);
     auto node3 = std::make_shared<TreeNode>(3, 8);
@@ -19,7 +18,6 @@ TEST(MinHeapTest, PushPopTest) {
 
     // std::cout << "TEST\n";
 
-    // 将节点插入堆中
     heap->push(node1);
     // std::cout << "\nTEST\n";
     heap->push(node2);
@@ -27,21 +25,21 @@ TEST(MinHeapTest, PushPopTest) {
     heap->push(node3);
     heap->push(node4);
     // std::cout << "TEST\n";
-    // 测试堆大小
+
     EXPECT_EQ(heap->size(), 4);
     // std::cout << "TEST\n";
-    // 测试弹出最小值
+
     auto minNode = heap->pop();
     EXPECT_EQ(minNode->frequency_, 1);
     // std::cout << "TEST\n";
-    // 测试堆大小
+
     EXPECT_EQ(heap->size(), 3);
     // std::cout << "TEST\n";
-    // 测试弹出第二小值
+
     minNode = heap->pop();
     EXPECT_EQ(minNode->frequency_, 3);
     // std::cout << "TEST\n";
-    // 测试堆大小
+
     EXPECT_EQ(heap->size(), 2);
     // std::cout << "TEST\n";
 }

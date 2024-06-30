@@ -76,6 +76,8 @@ private:
     */
     void performance(const std::string &file_before, const std::string &file_after);
 
+    void clear_file(const std::string &file_before, const std::string &file_after, const std::string &file_final);
+    
     // DATA
 
     int total_bit_cnt;

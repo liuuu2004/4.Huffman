@@ -37,10 +37,7 @@ int encode(std::vector<char> &res, std::unordered_map<char, std::string> &encode
         }
     }
     if (bit_cnt) {
-        while (bit_cnt < 0) {
-            byte <<= 1;
-            ++bit_cnt;
-        }
+        byte <<= (8 - bit_cnt);
         res.emplace_back(byte);
     }
     return total_bit_cnt;
@@ -48,16 +45,18 @@ int encode(std::vector<char> &res, std::unordered_map<char, std::string> &encode
 
 std::string decode(const std::string &buffer, int bit_cnt) {
     std::string res;
+    int total_bits_processed = 0;
     for (auto c : buffer) {
         for (int j = 7; j >= 0; --j) {
+            if (total_bits_processed == bit_cnt) {
+                break;
+            }
             if (c >> j & 1) {
                 res += "1";
             } else {
                 res += "0";
             }
-            if (res.length() == bit_cnt) {
-                break;
-            }
+            ++total_bits_processed;
         }
     }
     return res;

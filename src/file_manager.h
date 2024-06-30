@@ -22,6 +22,8 @@ public:
      * @param s :string to be written into the file
     */
     void write_file(const std::string &file_path, const std::string &s);
+
+    bool file_exist(const std::string &file_name);
 };
 
 
